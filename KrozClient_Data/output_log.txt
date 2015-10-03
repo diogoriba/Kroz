@@ -6,76 +6,14 @@ Direct3D:
     Vendor:   NVIDIA
     VRAM:     1009 MB
 Begin MonoManager ReloadAssembly
-Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading H:\redes\Kroz\KrozClient_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.632 seconds
+Platform assembly: C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+- Completed reload, in  0.056 seconds
 desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\System.Core.dll (this message is harmless)
-Initialize engine version: 4.6.3f1 (4753d8b6ef2b)
-GfxDevice: creating device client; threaded=1
-Direct3D:
-    Version:  Direct3D 11.0 [level 10.0]
-    Renderer: NVIDIA GeForce GTS 240 (ID=0x607)
-    Vendor:   NVIDIA
-    VRAM:     1009 MB
-Begin MonoManager ReloadAssembly
-Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading H:\redes\Kroz\KrozClient_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.481 seconds
-desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
-<RI> Initializing input.
-<RI> Input initialized.
-Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\System.Core.dll (this message is harmless)
-TTehser see rav dr scasnnedited scofnecter fromothem  tchle ienctl.i eMnotst.  Moiksly l itkhe lsyerv r hash  shetrdvwe.
- h
-( Fhultnadmwn: 
- L
-(nF:i7l5e
-n
-ame:  Line: 745)
-
-TheThe sererererhahas  diisscoonenctecedted from fhe clroenm t.th Me coientt  Mikstlylitkee y erhvee srrver h has ahu st hutddowwn.
-
- 
-(
-(Fillenaamee:   Linnee: 7745))
-
-
-Thhe  erevverrh shdis coisneonteed terd m rohe  tlieecnitn.. Moosttl keilely thethse rsvrver ehrahs assh uthudo wnow
- .
-(
- F
-(Flinaenaeme : LiLien:e:747455
-
-)
-
-TheTh se ererererh asasdiscdisncnennected ftom the cliedt. fMroostmlikethy t ce isenrv. r osas stut do n.
- 
-li(Felle tahee   Leriner: h7as5)sh
-
-ut down.
- 
-(Filename:  Line: 745)
-
-The server has disconnected from the client. Most likely the server has shut down.
- 
-(Filename:  Line: 745)
-
-Theh  seerveerr hasasdi siscononnenecced frtm edth fe romcl tienh. M cstielitke My stte ser lveikr elha s thshe utserdovewnr h.
-as 
-(huit ledonawnme.
-:  
- L(Finel: en74am)
-
-:  Line: 745)
-
+Platform assembly: C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\System.Core.dll (this message is harmless)
