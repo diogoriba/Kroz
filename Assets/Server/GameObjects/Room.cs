@@ -5,23 +5,17 @@ using System.Text;
 
 namespace Assets.Server.GameObjects
 {
-    public class Room
+    public class Room : Item
     {
-        public string description;
         public Dictionary<string, Room> neighbors;
 
-        public Room(string description)
+        public Room(string description) 
+            : base("", description)
         {
-            this.description = description;
             neighbors = new Dictionary<string, Room>();
         }
 
-        public void Describe(Player player)
-        {
-            player.Send("SERVER", description);
-        }
-
-        public void Go(string target, Player player)
+        public override void Go(string target, Player player)
         {
             if (neighbors.ContainsKey(target))
             {
@@ -30,7 +24,22 @@ namespace Assets.Server.GameObjects
             }
             else
             {
-                player.Send("SERVER", "Não há saída na direção " + target);
+                player.Talk(global::Server.Instance.ServerPlayer, "Não há saída na direção " + target);
+            }
+        }
+
+        public override void Parse(Command command, Player player)
+        {
+            switch (command.Verb)
+            {
+                case "go":
+                case "ir":
+                    string destination = command.Tail.FirstOrDefault();
+                    Go(destination, player);
+                    break;
+                default:
+                    base.Parse(command, player);
+                    break;
             }
         }
     }

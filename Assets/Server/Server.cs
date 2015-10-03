@@ -4,18 +4,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Assets.Server.GameObjects;
+using Assets.Server;
 
 public class Server : MonoBehaviour
 {
     private Rect window;
     private LogWindow logWindow;
     private List<Room> map;
-    public static NetworkView NetworkView { get; set; }
+    public static Server Instance { get; private set; }
+    public Player ServerPlayer { get; private set; }
+    public void Send(Player source, Player destination, string message, bool echo = true)
+    {
+        networkView.RPC("ApplyGlobalChatText", destination.NetworkPlayer, source.Name, message);
+        if (echo && source != ServerPlayer)
+        {
+            networkView.RPC("ApplyGlobalChatText", source.NetworkPlayer, source.Name, message);
+        }
+    }
+
+    public void Send(Player source, string destination, string message, bool echo = true)
+    {
+        Player destPlayer = GetPlayerNode(destination);
+        if (destPlayer != null)
+        {
+            Send(source, destPlayer, message, echo);
+        }
+        else
+        {
+            source.Talk(ServerPlayer, "Não há ninguém chamado '" + destination + "' aqui");
+        }
+    }
 
     void Awake()
     {
         logWindow = GetComponent<LogWindow>();
-        Server.NetworkView = networkView;
+        Instance = this;
+        ServerPlayer = new Player("SERVER", string.Empty);
+        ServerPlayer.NetworkPlayer = new NetworkPlayer();
 
         Room room1 = new Room("Depois de uma longa caminhada da cidade de Valen’var, você se encontra na entrada da “caverna dos esquecidos”. Uma entrada de 3 metros que se estende a té onde os olhos conseguem enxergar. O vento frio da região montanhosa sopra para dentro das profundezas da caverna. O que você pretende fazer?");
         Room room2 = new Room("O caminho é úmido e escorregadio, você caminha com cautela, deixando frio gélido para traz.Depois de uma decida de alguns metros, você se encontra em um ambiente aberto, como uma pequena sala escava na pedra, ela é iluminada por duas tochas que se encontra em paredes oposta. O que pretende fazer?");
@@ -69,42 +94,98 @@ public class Server : MonoBehaviour
 
     }
 
+    public Item Find(Player player, string itemName)
+    {
+        // Player
+        Player targetPlayer = GetPlayerNode(itemName);
+        if (targetPlayer != null)
+        {
+            return targetPlayer;
+        }
+
+        // Inventory
+        foreach (Item item in player.Items)
+        {
+            if (item.Name.Equals(itemName))
+            {
+                return item;
+            }
+        }
+
+        // Room items
+        foreach (Item item in player.Room.Items)
+        {
+            if (item.Name.Equals(itemName))
+            {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
     [RPC]
     void ApplyGlobalChatText(string name, string command)
     {
         if (Network.connections.Length > 0)
         {
-            command = command.ToLower();
-            string[] parsedCommand = command.Split(' ');
-            string verb = parsedCommand[0];
-            string target = parsedCommand[1];
-            string[] tail = parsedCommand.Skip(2).ToArray();
             Player author = GetPlayerNode(name);
-            switch (verb)
+            if (author != null)
             {
-                case "talk":
-                case "falar":
-                    string message = String.Join(" ", tail);
-                    logWindow.Log("[talk] " + name + " -> " + target + ": " + message);
-                    Player targetPlayer = GetPlayerNode(target);
-                    if (target == null)
-                    {
-                        author.Send("SERVER", "Não há ninguém chamado '" + target + "' aqui");
-                    }
-                    else
-                    {
-                        targetPlayer.Send(name, message);
-                        author.Send(name, message); // echo
-                    }
-                    break;
-                case "go":
-                case "ir":
-                    author.Room.Go(target, author);
-                    break;
-                default:
-                    author.Send("SERVER", "Comando inválido");
-                    break;
+                command = command.ToLower();
+                string[] parsedCommand = command.Split(' ');
+                string verb = parsedCommand[0];
+                string target = parsedCommand[1];
+                Item targetItem = Find(author, target);
+                string[] tail = parsedCommand.Skip(1).ToArray();
+
+                Command cmd = new Command(verb, targetItem, tail);
+                switch (cmd.Verb)
+                {
+                    case "ir":
+                        author.Room.Parse(cmd, author);
+                        break;
+                    case "examinar":
+                    case "falar":
+                        if (targetItem != null)
+                        {
+                            targetItem.Parse(cmd, author);
+                        }
+                        else
+                        {
+                            author.Talk(global::Server.Instance.ServerPlayer, string.Format("Do que você está falando? Não há nada chamado {0}", target));
+                        }
+                        break;
+                    default:
+                        author.Talk(global::Server.Instance.ServerPlayer, "Comando inválido");
+                        break;
+                }
             }
+
+            //switch (verb)
+            //{
+            //    case "talk":
+            //    case "falar":
+            //        string message = String.Join(" ", tail);
+            //        logWindow.Log("[talk] " + name + " -> " + target + ": " + message);
+            //        Player targetPlayer = GetPlayerNode(target);
+            //        if (targetPlayer == null)
+            //        {
+            //            author.Talk(global::Server.Instance.ServerPlayer, "Não há ninguém chamado '" + target + "' aqui");
+            //        }
+            //        else
+            //        {
+            //            targetPlayer.Talk(author, message);
+            //        }
+            //        break;
+            //    case "go":
+            //    case "ir":
+            //        author.Room.Go(target, author);
+            //        break;
+            //    default:
+            //        author.Talk(global::Server.Instance.ServerPlayer, "Comando inválido");
+            //        break;
+            //}
         }
     }
 
@@ -130,7 +211,7 @@ public class Server : MonoBehaviour
     {
         foreach (Player entry in playerList)
         {
-            if (entry.PlayerName.ToLower() == playerName.ToLower())
+            if (entry.Name.ToLower() == playerName.ToLower())
             {
                 return entry;
             }
@@ -157,11 +238,11 @@ public class Server : MonoBehaviour
     //Sent by newly connected clients, recieved by server
     void TellServerOurName(string name, NetworkMessageInfo info)
     {
-        Player newEntry = new Player();
-        newEntry.PlayerName = name;
+        Player newEntry = new Player(name);
         newEntry.NetworkPlayer = info.sender;
         newEntry.Room = map.First();
         playerList.Add(newEntry);
+        newEntry.Room.Describe(newEntry); // initial description
 
         logWindow.Log(name + " joined the chat");
     }

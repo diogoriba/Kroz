@@ -6,15 +6,8 @@ using UnityEngine;
 
 namespace Assets.Server.GameObjects
 {
-    public class Player
+    public class Player : Item
     {
-        private string playerName;
-
-        public string PlayerName
-        {
-            get { return playerName; }
-            set { playerName = value; }
-        }
         private Room room;
 
         public Room Room
@@ -30,9 +23,14 @@ namespace Assets.Server.GameObjects
             set { networkPlayer = value; }
         }
 
-        public void Send(string authorName, string message)
+        public Player(string name, string description = "Um ser humano sem características extraordinárias") :
+            base(name, description) 
         {
-            global::Server.NetworkView.RPC("ApplyGlobalChatText", networkPlayer, authorName, message);
+        }
+
+        public override void Talk(Player author, string message)
+        {
+            global::Server.Instance.Send(author, this, message);
         }
     }
 }
