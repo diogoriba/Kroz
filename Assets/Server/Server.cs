@@ -53,9 +53,7 @@ public class Server : MonoBehaviour
         room10.neighbors.Add("sul",   room8);
         room11.neighbors.Add("sul",   room10);
 
-
         map = new List<Room>();
-        map.Add(room0);
         map.Add(room1);
         map.Add(room2);
         map.Add(room3);
@@ -67,6 +65,7 @@ public class Server : MonoBehaviour
         map.Add(room9);
         map.Add(room10);
         map.Add(room11);
+        map.Add(room12);
 
     }
 
