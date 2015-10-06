@@ -26,11 +26,17 @@ namespace Assets.Server.GameObjects
         public Player(string name, string description = "Um ser humano sem características extraordinárias") :
             base(name, description) 
         {
+
         }
 
         public override void Talk(Player author, string message)
         {
             global::Server.Instance.Send(author, this, message);
         }
+
+        //public override void Use(string command, Item target)
+        //{
+
+        //}
     }
 }

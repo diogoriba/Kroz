@@ -29,6 +29,9 @@ namespace Assets.Server.GameObjects
                     string message = String.Join(" ", command.Tail.Skip(1).ToArray());
                     Talk(player, message);
                     break;
+                //case "usar":
+                //case "pegar":
+                //case "abrir":
                 default:
                     global::Server.Instance.Send(global::Server.Instance.ServerPlayer, player, string.Format("Você não pode {0} {1}", command, Name));
                     break;
@@ -49,5 +52,10 @@ namespace Assets.Server.GameObjects
         {
             author.Talk(global::Server.Instance.ServerPlayer, string.Format("Você fala \"{0}\" para {1}, mas a falta de consciência de {1} parece ser um problema para a compreensão de sua mensagem", message, Name));
         }
+
+        //public virtual void Use(string commnad, Item target)
+        //{
+
+        //}
     }
 }

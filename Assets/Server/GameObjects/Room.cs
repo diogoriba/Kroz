@@ -32,11 +32,12 @@ namespace Assets.Server.GameObjects
         {
             switch (command.Verb)
             {
-                case "go":
                 case "ir":
                     string destination = command.Tail.FirstOrDefault();
                     Go(destination, player);
                     break;
+                //case "examinar":
+                //case "pegar":
                 default:
                     base.Parse(command, player);
                     break;

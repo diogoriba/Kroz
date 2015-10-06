@@ -146,6 +146,7 @@ public class Server : MonoBehaviour
                         author.Room.Parse(cmd, author);
                         break;
                     case "examinar":
+                    //case "usar":
                     case "falar":
                         if (targetItem != null)
                         {
