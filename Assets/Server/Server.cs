@@ -41,8 +41,8 @@ public class Server : MonoBehaviour
         Instance = this;
         ServerPlayer = new Player("SERVER", string.Empty);
         ServerPlayer.NetworkPlayer = new NetworkPlayer();
-
         Room room1 = new Room("Depois de uma longa caminhada da cidade de Valen’var, você se encontra na entrada da “caverna dos esquecidos”. Uma entrada de 3 metros que se estende a té onde os olhos conseguem enxergar. O vento frio da região montanhosa sopra para dentro das profundezas da caverna. O que você pretende fazer?");
+        room1.DetailedDescription = "Descrição detalhada";
         Room room2 = new Room("O caminho é úmido e escorregadio, você caminha com cautela, deixando frio gélido para traz.Depois de uma decida de alguns metros, você se encontra em um ambiente aberto, como uma pequena sala escava na pedra, ela é iluminada por duas tochas que se encontra em paredes oposta. O que pretende fazer?");
         Room room3 = new Room("Você se encontra em uma sala ampla e bem iluminada, ao centro há uma grande mesa e cadeiras. Ao norte se vê uma parede onde com um acesso para outro aposento. Um cheiro de cozido pode ser sentido no ambiente. O que pretende fazer?");
         Room room4 = new Room("Você entra em uma sala não muito ampla, com panelas e despensas espalhados pelo local. Era aqui que se preparava as refeições que eram servidas no aposento anterior. O que pretende fazer?");
@@ -101,6 +101,12 @@ public class Server : MonoBehaviour
         if (targetPlayer != null)
         {
             return targetPlayer;
+        }
+
+        // Room
+        if (itemName.Equals("sala"))
+        {
+            return player.Room;
         }
 
         // Inventory
@@ -241,8 +247,8 @@ public class Server : MonoBehaviour
     {
         Player newEntry = new Player(name);
         newEntry.NetworkPlayer = info.sender;
-        newEntry.Room = map.First();
         playerList.Add(newEntry);
+        newEntry.Room = map.First();
         newEntry.Room.Describe(newEntry); // initial description
 
         logWindow.Log(name + " joined the chat");
