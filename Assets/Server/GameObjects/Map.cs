@@ -29,6 +29,6 @@ namespace Assets.Server.GameObjects
        string map20 = "            *  *                                           ";
        string map21 = "            *  *                                           ";
        string map22 = "            *  *                                           ";
-       string map23 = "            *  *                                           ");
+       string map23 = "            *  *                                           ";
     }   
 }
