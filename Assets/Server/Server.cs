@@ -96,34 +96,37 @@ public class Server : MonoBehaviour
 
     public Item Find(Player player, string itemName)
     {
-        // Player
-        Player targetPlayer = GetPlayerNode(itemName);
-        if (targetPlayer != null)
+        if (!string.IsNullOrEmpty(itemName))
         {
-            return targetPlayer;
-        }
-
-        // Room
-        if (itemName.Equals("sala"))
-        {
-            return player.Room;
-        }
-
-        // Inventory
-        foreach (Item item in player.Items)
-        {
-            if (item.Name.Equals(itemName))
+            // Player
+            Player targetPlayer = GetPlayerNode(itemName);
+            if (targetPlayer != null)
             {
-                return item;
+                return targetPlayer;
             }
-        }
 
-        // Room items
-        foreach (Item item in player.Room.Items)
-        {
-            if (item.Name.Equals(itemName))
+            // Room
+            if (itemName.Equals("sala"))
             {
-                return item;
+                return player.Room;
+            }
+
+            // Inventory
+            foreach (Item item in player.Items)
+            {
+                if (item.Name.Equals(itemName))
+                {
+                    return item;
+                }
+            }
+
+            // Room items
+            foreach (Item item in player.Room.Items)
+            {
+                if (item.Name.Equals(itemName))
+                {
+                    return item;
+                }
             }
         }
 
@@ -141,13 +144,17 @@ public class Server : MonoBehaviour
                 command = command.ToLower();
                 string[] parsedCommand = command.Split(' ');
                 string verb = parsedCommand[0];
-                string target = parsedCommand[1];
+                string target = parsedCommand.ElementAtOrDefault(1) ?? "";
                 Item targetItem = Find(author, target);
                 string[] tail = parsedCommand.Skip(1).ToArray();
 
                 Command cmd = new Command(verb, targetItem, tail);
                 switch (cmd.Verb)
                 {
+                    case "inventário":
+                    case "inventario":
+                        author.Inventory(author);
+                        break;
                     case "ir":
                         author.Room.Parse(cmd, author);
                         break;
