@@ -8,6 +8,13 @@ namespace Assets.Server.GameObjects
     public class Room : Item
     {
         public Dictionary<string, Room> neighbors;
+        public string DetailedDescription { get; set; }
+
+        public Room()
+            : base("", "")
+        {
+            neighbors = new Dictionary<string, Room>();
+        }
 
         public Room(string description) 
             : base("", description)
@@ -28,6 +35,11 @@ namespace Assets.Server.GameObjects
             }
         }
 
+        public void DetailedDescribe(Player player)
+        {
+            player.Talk(global::Server.Instance.ServerPlayer, DetailedDescription);
+        }
+
         public override void Parse(Command command, Player player)
         {
             switch (command.Verb)
@@ -36,8 +48,9 @@ namespace Assets.Server.GameObjects
                     string destination = command.Tail.FirstOrDefault();
                     Go(destination, player);
                     break;
-                //case "examinar":
-                //case "pegar":
+                case "examinar":
+                    DetailedDescribe(player);
+                    break;
                 default:
                     base.Parse(command, player);
                     break;
