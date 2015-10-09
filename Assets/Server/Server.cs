@@ -54,8 +54,9 @@ public class Server : MonoBehaviour
         ServerPlayer = new Player("DM", string.Empty);
         ServerPlayer.NetworkPlayer = new NetworkPlayer();
         Room room1 = new Room("Depois de uma longa caminhada da cidade de Valen’var, você se encontra na entrada da “caverna dos esquecidos”. Uma entrada de 3 metros que se estende a té onde os olhos conseguem enxergar. O vento frio da região montanhosa sopra para dentro das profundezas da caverna. O que você pretende fazer?");
-        room1.DetailedDescription = "Descrição detalhada";
+        room1.DetailedDescription = "A entrada foi entalhada na montanha de forma rustica, sem muito adorno e cuidado. Você consegue ver algumas vigas de sustentação em madeira segurando o teto.";
         Room room2 = new Room("O caminho é úmido e escorregadio, você caminha com cautela, deixando frio gélido para traz.Depois de uma decida de alguns metros, você se encontra em um ambiente aberto, como uma pequena sala escava na pedra, ela é iluminada por duas tochas que se encontra em paredes oposta. O que pretende fazer?");
+        room2.DetailedDescription = " É uma sala escavada na pedra, apenas um banco se encontra na parte norte da sala. Fora as tochas e as portas, não há mais nada de interessante nesse aposento."
         Room room3 = new Room("Você se encontra em uma sala ampla e bem iluminada, ao centro há uma grande mesa e cadeiras. Ao norte se vê uma parede onde com um acesso para outro aposento. Um cheiro de cozido pode ser sentido no ambiente. O que pretende fazer?");
         Room room4 = new Room("Você entra em uma sala não muito ampla, com panelas e despensas espalhados pelo local. Era aqui que se preparava as refeições que eram servidas no aposento anterior. O que pretende fazer?");
         Room room5 = new Room("O corredor é apenas iluminado por um brilho sibilante que sai de uma porta do lado oposto.O que pretende fazer?");
