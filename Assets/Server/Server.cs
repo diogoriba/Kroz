@@ -112,7 +112,7 @@ public class Server : MonoBehaviour
         room9.Neighbors.Add("oeste", room8);
         room10.Neighbors.Add("norte", room12);
         room10.Neighbors.Add("sul", room9);
-        
+
         map = new List<Room>();
         map.Add(room1);
         map.Add(room2);
@@ -273,6 +273,11 @@ public class Server : MonoBehaviour
         logWindow.Log("Player disconnected from: " + player.ipAddress + ":" + player.port);
 
         //Remove player from the server list
+        Player playerObject = GetPlayerNode(player);
+        foreach (Item item in playerObject.Items)
+        {
+            item.Leave(playerObject);
+        }
         playerList.Remove(GetPlayerNode(player));
     }
 
@@ -289,6 +294,7 @@ public class Server : MonoBehaviour
         Player newEntry = new Player(name);
         newEntry.NetworkPlayer = info.sender;
         playerList.Add(newEntry);
+        newEntry.Scream(newEntry, "", "se junta à aventura");
         newEntry.Room = map.First();
         newEntry.Room.Describe(newEntry); // initial description
 
