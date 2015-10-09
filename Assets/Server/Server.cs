@@ -25,21 +25,33 @@ public class Server : MonoBehaviour
     }
     public static Server Instance { get; private set; }
     public Player ServerPlayer { get; private set; }
-    public void Send(Player source, Player destination, string message, bool echo = true)
+
+    public void Send(Player source, string action, string message)
     {
-        networkView.RPC("ApplyGlobalChatText", destination.NetworkPlayer, source.Name, message);
-        if (echo && source != ServerPlayer)
+        foreach (Player player in playerList)
         {
-            networkView.RPC("ApplyGlobalChatText", source.NetworkPlayer, source.Name, message);
+            if (player.Room == source.Room)
+            {
+                networkView.RPC("ApplyGlobalChatText", player.NetworkPlayer, source.Name, action, message);
+            }
         }
     }
 
-    public void Send(string destination, string message, Player source, bool echo = true)
+    public void Send(Player source, Player destination, string action, string message, bool echo = true)
+    {
+        networkView.RPC("ApplyGlobalChatText", destination.NetworkPlayer, source.Name, action, message);
+        if (echo && source != ServerPlayer)
+        {
+            networkView.RPC("ApplyGlobalChatText", source.NetworkPlayer, source.Name, action, message);
+        }
+    }
+
+    public void Send(string destination, string action, string message, Player source, bool echo = true)
     {
         Player destPlayer = GetPlayerNode(destination);
         if (destPlayer != null)
         {
-            Send(source, destPlayer, message, echo);
+            Send(source, destPlayer, action, message, echo);
         }
         else
         {
@@ -118,6 +130,7 @@ public class Server : MonoBehaviour
 
     public Item Find(Player player, string itemName)
     {
+        itemName = itemName.ToLower();
         if (!string.IsNullOrEmpty(itemName))
         {
             // Player
@@ -152,7 +165,7 @@ public class Server : MonoBehaviour
     }
 
     [RPC]
-    void ApplyGlobalChatText(string name, string command)
+    void ApplyGlobalChatText(string name, string action, string command)
     {
         if (Network.connections.Length > 0)
         {
@@ -168,6 +181,9 @@ public class Server : MonoBehaviour
                         break;
                     case "ir":
                         author.Room.Parse(cmd, author);
+                        break;
+                    case "gritar":
+                        author.Parse(cmd, author);
                         break;
                     case "pegar":
                     case "largar":
@@ -193,9 +209,8 @@ public class Server : MonoBehaviour
 
     private Command Parse(string command, Player author)
     {
-        command = command.ToLower();
         string[] parsedCommand = command.Split(' ');
-        string verb = parsedCommand[0];
+        string verb = parsedCommand[0].ToLower();
         string target = parsedCommand.ElementAtOrDefault(1) ?? "";
         Item targetItem = Find(author, target);
         string[] tail;

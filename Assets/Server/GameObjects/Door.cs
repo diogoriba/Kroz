@@ -31,15 +31,18 @@ namespace Assets.Server.GameObjects
             {
                 Locked = !Locked;
                 string text;
+                string action;
                 if (Locked)
                 {
+                    action = "fecha uma porta";
                     text = LockDescription;
                 }
                 else
                 {
+                    action = "abre uma porta";
                     text = UnlockDescription;
                 }
-                player.Talk(global::Server.Instance.ServerPlayer, text);
+                player.Scream(player, text, action);
                 return true;
             }
 

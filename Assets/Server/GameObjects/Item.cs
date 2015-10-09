@@ -30,14 +30,17 @@ namespace Assets.Server.GameObjects
 
         public virtual void Parse(Command command, Player player)
         {
+            string message = String.Join(" ", command.Tail.ToArray());
             switch (command.Verb)
             {
                 case "examinar":
                     Describe(player);
                     break;
                 case "falar":
-                    string message = String.Join(" ", command.Tail.ToArray());
                     Talk(player, message);
+                    break;
+                case "gritar":
+                    Scream(player, message);
                     break;
                 case "inventario":
                     Inventory(player);
@@ -51,15 +54,15 @@ namespace Assets.Server.GameObjects
                 case "largar":
                     Leave(player);
                     break;
-                //case "abrir":
                 default:
-                    global::Server.Instance.Send(global::Server.Instance.ServerPlayer, player, string.Format("Você não pode {0} {1}", command, Name));
+                    player.Talk(global::Server.Instance.ServerPlayer, string.Format("Você não pode {0} {1}", command, Name));
                     break;
             }
         }
 
         public virtual Item Find(string target)
         {
+            target = target.ToLower();
             foreach (Item item in Items)
             {
                 if (item.Name.Equals(target))
@@ -80,9 +83,14 @@ namespace Assets.Server.GameObjects
             player.Talk(global::Server.Instance.ServerPlayer, string.Format("\"{0}\" não é um lugar onde você possa ir", Name));
         }
 
-        public virtual void Talk(Player author, string message)
+        public virtual void Talk(Player author, string message, string action = "fala")
         {
             author.Talk(global::Server.Instance.ServerPlayer, string.Format("Você fala \"{0}\" para {1}, mas a falta de consciência de {1} parece ser um problema para a compreensão de sua mensagem", message, Name));
+        }
+
+        public virtual void Scream(Player author, string message, string action = "grita")
+        {
+            author.Talk(global::Server.Instance.ServerPlayer, string.Format("Após berrar \"{0}\" vigorosamente você se sente mais calmo, mas {1} não parece se importar", message, Name));
         }
 
         public virtual void Inventory(Player author)
@@ -129,47 +137,6 @@ namespace Assets.Server.GameObjects
         {
             player.Talk(global::Server.Instance.ServerPlayer, string.Format("{0} não parece interagir com {1} de nenhuma maneira interessante", source.Name, Name));
             return false;
-        }
-    }
-
-    public class HoldableItem : Item
-    {
-        public HoldableItem(string name, string description)
-            : base(name, description)
-        {
-
-        }
-
-        public override void Take(Player player)
-        {
-            if (player.Items.Contains(this))
-            {
-                player.Talk(global::Server.Instance.ServerPlayer, string.Format("Você já possui {0}", Name));
-            }
-            else if (player.Room.Items.Contains(this))
-            {
-                player.Room.Items.Remove(this);
-                player.Items.Add(this);
-                player.Talk(global::Server.Instance.ServerPlayer, string.Format("Você pegou {0}", Name));
-            }
-            else
-            {
-                global::Server.Instance.LogWindow.Log(string.Format("{0} tentou pegar um item {1} que não está nem no inventário nem na sala", player.Name, Name));
-            }
-        }
-
-        public override void Leave(Player player)
-        {
-            if (player.Items.Contains(this))
-            {
-                player.Items.Remove(this);
-                player.Room.Items.Add(this);
-                player.Talk(global::Server.Instance.ServerPlayer, string.Format("Você largou {0} no chão", Name));
-            }
-            else
-            {
-                global::Server.Instance.LogWindow.Log(string.Format("{0} tentou largar um item {1} que ele não possui", player.Name, Name));
-            }
         }
     }
 }
