@@ -297,6 +297,7 @@ public class Server : MonoBehaviour
         Player newEntry = new Player(name);
         newEntry.NetworkPlayer = info.sender;
         playerList.Add(newEntry);
+        newEntry.Scream(newEntry, "", "se junta à aventura");
         newEntry.Room = map.First();
         newEntry.Room.Describe(newEntry); // initial description
 
