@@ -276,6 +276,11 @@ public class Server : MonoBehaviour
         logWindow.Log("Player disconnected from: " + player.ipAddress + ":" + player.port);
 
         //Remove player from the server list
+        Player playerObject = GetPlayerNode(player);
+        foreach (Item item in playerObject.Items)
+        {
+            item.Leave(playerObject);
+        }
         playerList.Remove(GetPlayerNode(player));
     }
 
