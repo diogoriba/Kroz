@@ -34,7 +34,7 @@ public class Server : MonoBehaviour
         }
     }
 
-    public void Send(Player source, string destination, string message, bool echo = true)
+    public void Send(string destination, string message, Player source, bool echo = true)
     {
         Player destPlayer = GetPlayerNode(destination);
         if (destPlayer != null)
@@ -68,27 +68,27 @@ public class Server : MonoBehaviour
         Room room12 = new Room("Deixando as riquezas e aventura que explorar esta mina poderia propiciar, você decide que não vale o risco de se aventurar em um ambiente desconhecido e claustrofóbico e resolve voltar para cidade. Talvez deixando o mundo de aventurar para outros intrépetos que aceite essa riqueza e fama. E você vive uma vida pacifica e tranquila em uma fazenda ao sul.");
 
 
-        room1.neighbors.Add("norte",  room2);
-        room1.neighbors.Add("sul",    room12);
-        room2.neighbors.Add("sul",    room1);
-        room2.neighbors.Add("oeste",  room3);
-        room2.neighbors.Add("leste",  room5);
-        room3.neighbors.Add("leste",  room2);
-        room3.neighbors.Add("norte",  room4);
-        room4.neighbors.Add("sul",    room3);
-        room5.neighbors.Add("leste",  room6);
-        room5.neighbors.Add("oeste",  room2);
-        room6.neighbors.Add("norte",  room9);
-        room6.neighbors.Add("sul",    room7);
-        room6.neighbors.Add("oeste",  room5);
-        room7.neighbors.Add("leste",  room8);
-        room7.neighbors.Add("norte",  room6);
-        room8.neighbors.Add("norte",  room10);
-        room8.neighbors.Add("oeste",  room7);
-        room9.neighbors.Add("sul",    room6);
-        room10.neighbors.Add("norte", room11);
-        room10.neighbors.Add("sul",   room8);
-        room11.neighbors.Add("sul",   room10);
+        room1.Neighbors.Add("norte",  room2);
+        room1.Neighbors.Add("sul",    room12);
+        room2.Neighbors.Add("sul",    room1);
+        room2.Neighbors.Add("oeste",  room3);
+        room2.Neighbors.Add("leste",  room5);
+        room3.Neighbors.Add("leste",  room2);
+        room3.Neighbors.Add("norte",  room4);
+        room4.Neighbors.Add("sul",    room3);
+        room5.Neighbors.Add("leste",  room6);
+        room5.Neighbors.Add("oeste",  room2);
+        room6.Neighbors.Add("norte",  room9);
+        room6.Neighbors.Add("sul",    room7);
+        room6.Neighbors.Add("oeste",  room5);
+        room7.Neighbors.Add("leste",  room8);
+        room7.Neighbors.Add("norte",  room6);
+        room8.Neighbors.Add("norte",  room10);
+        room8.Neighbors.Add("oeste",  room7);
+        room9.Neighbors.Add("sul",    room6);
+        room10.Neighbors.Add("norte", room11);
+        room10.Neighbors.Add("sul",   room8);
+        room11.Neighbors.Add("sul",   room10);
 
         map = new List<Room>();
         map.Add(room1);
@@ -108,8 +108,11 @@ public class Server : MonoBehaviour
         room1.Items.Add(maca);
         Key key = new Key("chave", "uma chave prateada bem simples");
         room1.Items.Add(key);
-        Door door = new Door("portanorte", "porta de madeira toda mofada toda horrorosa cheia de cupim");
-        room1.Items.Add(door);
+        Door door = new Door("", "");
+        room1.Doors.Add("norte", door);
+        room2.Doors.Add("sul", door);
+        Map mapItem = new Map();
+        room1.Items.Add(mapItem);
     }
 
     public Item Find(Player player, string itemName)
@@ -155,20 +158,9 @@ public class Server : MonoBehaviour
             Player author = GetPlayerNode(name);
             if (author != null)
             {
-                command = command.ToLower();
-                string[] parsedCommand = command.Split(' ');
-                string verb = parsedCommand[0];
-                string target = parsedCommand.ElementAtOrDefault(1) ?? "";
-                Item targetItem = Find(author, target);
-                string[] tail = parsedCommand.Skip(2).ToArray();
-
-                Command cmd = new Command(verb, targetItem, tail);
+                Command cmd = Parse(command, author);
                 switch (cmd.Verb)
                 {
-                    case "cheat":
-                        Map map = new Map();
-                        map.Describe(author);
-                        break;
                     case "inventário":
                     case "inventario":
                         author.Inventory(author);
@@ -181,13 +173,13 @@ public class Server : MonoBehaviour
                     case "examinar":
                     case "usar":
                     case "falar":
-                        if (targetItem != null)
+                        if (cmd.Target != null)
                         {
-                            targetItem.Parse(cmd, author);
+                            cmd.Target.Parse(cmd, author);
                         }
                         else
                         {
-                            author.Talk(global::Server.Instance.ServerPlayer, string.Format("Do que você está falando? Não há nada chamado {0}", target));
+                            author.Talk(global::Server.Instance.ServerPlayer, string.Format("Do que você está falando? Não há nada chamado {0}", cmd.Tail.FirstOrDefault()));
                         }
                         break;
                     default:
@@ -195,32 +187,27 @@ public class Server : MonoBehaviour
                         break;
                 }
             }
-
-            //switch (verb)
-            //{
-            //    case "talk":
-            //    case "falar":
-            //        string message = String.Join(" ", tail);
-            //        logWindow.Log("[talk] " + name + " -> " + target + ": " + message);
-            //        Player targetPlayer = GetPlayerNode(target);
-            //        if (targetPlayer == null)
-            //        {
-            //            author.Talk(global::Server.Instance.ServerPlayer, "Não há ninguém chamado '" + target + "' aqui");
-            //        }
-            //        else
-            //        {
-            //            targetPlayer.Talk(author, message);
-            //        }
-            //        break;
-            //    case "go":
-            //    case "ir":
-            //        author.Room.Go(target, author);
-            //        break;
-            //    default:
-            //        author.Talk(global::Server.Instance.ServerPlayer, "Comando inválido");
-            //        break;
-            //}
         }
+    }
+
+    private Command Parse(string command, Player author)
+    {
+        command = command.ToLower();
+        string[] parsedCommand = command.Split(' ');
+        string verb = parsedCommand[0];
+        string target = parsedCommand.ElementAtOrDefault(1) ?? "";
+        Item targetItem = Find(author, target);
+        string[] tail;
+        if ((targetItem != null) && (!verb.Equals("ir")))
+        {
+            tail = parsedCommand.Skip(2).ToArray();
+        }
+        else
+        {
+            tail = parsedCommand.Skip(1).ToArray();
+        }
+
+        return new Command(verb, targetItem, tail);
     }
 
     #region server

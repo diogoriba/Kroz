@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assets.Server.GameObjects
 {
-    public class Map : Item
+    public class Map : HoldableItem
     {
         private static string mapString;
         static Map()

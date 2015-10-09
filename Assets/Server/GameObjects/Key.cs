@@ -10,7 +10,7 @@ namespace Assets.Server.GameObjects
         public Key(string name, string description)
             : base(name, description)
         {
-            Consumable = true;
+            Consumable = false;
         }
 
         public override void Use(Command command, Player player)
