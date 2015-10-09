@@ -21,6 +21,7 @@ namespace Assets.Server.GameObjects
             {
                 if (player.Items.Contains(this))
                 {
+                    player.Scream(player, "", "usa uma chave em " + tail);
                     if (targetItem.UseOn(this, player) && Consumable)
                     {
                         player.Items.Remove(this);
@@ -28,7 +29,7 @@ namespace Assets.Server.GameObjects
                 }
                 else
                 {
-                    player.Talk(global::Server.Instance.ServerPlayer, string.Format("Do que você está falando? Não há nada chamado {0}", tail));
+                    player.Talk(global::Server.Instance.ServerPlayer, string.Format("Do que você está falando? Não há nada chamado {0}", Name));
                 }
             }
             else

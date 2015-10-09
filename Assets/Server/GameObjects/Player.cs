@@ -29,9 +29,14 @@ namespace Assets.Server.GameObjects
 
         }
 
-        public override void Talk(Player author, string message)
+        public override void Talk(Player author, string message, string action = "fala")
         {
-            global::Server.Instance.Send(author, this, message);
+            global::Server.Instance.Send(author, this, action, message);
+        }
+
+        public override void Scream(Player author, string message, string action = "grita")
+        {
+            global::Server.Instance.Send(author, action, message);
         }
 
         //public override void Use(string command, Item target)

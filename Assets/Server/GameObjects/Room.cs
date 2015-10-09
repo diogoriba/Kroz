@@ -39,6 +39,7 @@ namespace Assets.Server.GameObjects
 
         public override Item Find(string target)
         {
+            target = target.ToLower();
             if (doors.ContainsKey(target))
             {
                 return doors[target];
@@ -48,11 +49,14 @@ namespace Assets.Server.GameObjects
 
         public override void Go(string target, Player player)
         {
+            target = target.ToLower();
             if (neighbors.ContainsKey(target))
             {
                 if (!doors.ContainsKey(target) || !doors[target].Locked)
                 {
+                    player.Scream(player, "", "deixa a sala pela saída " + target);
                     player.Room = neighbors[target];
+                    player.Scream(player, "", "entra na sala");
                     player.Room.Describe(player);
                 }
                 else

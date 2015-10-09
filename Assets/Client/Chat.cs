@@ -18,6 +18,7 @@ public class Chat : MonoBehaviour {
     public class ChatEntry
     {
 	    public string name = "";
+        public string action = "";
 	    public string text = "";	
     }
 
@@ -89,11 +90,12 @@ public class Chat : MonoBehaviour {
 	    foreach (ChatEntry entry in chatEntries)
 	    {
 		    GUILayout.BeginHorizontal();
-		    if(entry.name==""){//Game message
-			    GUILayout.Label (entry.text);
-		    }else{
-			    GUILayout.Label (entry.name+": "+entry.text);
-		    }
+            string text = entry.name + " " + entry.action;
+            if (!string.IsNullOrEmpty(entry.text))
+            {
+                text = text + ": " + entry.text;
+            }
+			GUILayout.Label(text);
 		    GUILayout.EndHorizontal();
 		    GUILayout.Space(3);
 		
@@ -120,7 +122,7 @@ public class Chat : MonoBehaviour {
 
     void HitEnter(string msg){
 	    msg = msg.Replace("\n", "");
-	    networkView.RPC("ApplyGlobalChatText", RPCMode.Server, playerName, msg);
+	    networkView.RPC("ApplyGlobalChatText", RPCMode.Server, playerName, "", msg);
 	    inputField = ""; //Clear line
 	    //GUI.UnfocusWindow ();//Deselect chat
 	    //lastUnfocusTime=Time.time;
@@ -129,10 +131,11 @@ public class Chat : MonoBehaviour {
 
 
     [RPC]
-    void ApplyGlobalChatText (string name, string msg)
+    void ApplyGlobalChatText (string name, string action, string msg)
     {
 	    var entry = new ChatEntry();
 	    entry.name = name;
+        entry.action = action;
 	    entry.text = msg;
 
 	    chatEntries.Add(entry);
