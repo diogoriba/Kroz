@@ -6,14 +6,14 @@ Direct3D:
     Vendor:   NVIDIA
     VRAM:     1009 MB
 Begin MonoManager ReloadAssembly
-Platform assembly: C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.056 seconds
+Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading H:\redes\Kroz\KrozClient_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading H:\redes\Kroz\KrozClient_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+- Completed reload, in  0.502 seconds
 desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-Platform assembly: C:\Users\15191901.PORTOALEGRE.021\Source\Repos\Kroz\KrozClient_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: H:\redes\Kroz\KrozClient_Data\Managed\System.Core.dll (this message is harmless)

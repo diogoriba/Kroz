@@ -5,8 +5,10 @@ public class ServerUI : MonoBehaviour {
 
     public string connectToIP = "";
     public int connectPort = 53105;
+
     void OnGUI()
     {
+        GUI.skin.font = (Font)Resources.Load("Consolas");
         if (Network.peerType == NetworkPeerType.Disconnected)
         {
             //We are currently disconnected: Not a client or host

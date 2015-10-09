@@ -10,7 +10,19 @@ public class Server : MonoBehaviour
 {
     private Rect window;
     private LogWindow logWindow;
+
+    public LogWindow LogWindow
+    {
+        get { return logWindow; }
+        set { logWindow = value; }
+    }
     private List<Room> map;
+
+    public List<Room> Map
+    {
+        get { return map; }
+        set { map = value; }
+    }
     public static Server Instance { get; private set; }
     public Player ServerPlayer { get; private set; }
     public void Send(Player source, Player destination, string message, bool echo = true)
@@ -39,7 +51,7 @@ public class Server : MonoBehaviour
     {
         logWindow = GetComponent<LogWindow>();
         Instance = this;
-        ServerPlayer = new Player("SERVER", string.Empty);
+        ServerPlayer = new Player("DM", string.Empty);
         ServerPlayer.NetworkPlayer = new NetworkPlayer();
         Room room1 = new Room("Depois de uma longa caminhada da cidade de Valen’var, você se encontra na entrada da “caverna dos esquecidos”. Uma entrada de 3 metros que se estende a té onde os olhos conseguem enxergar. O vento frio da região montanhosa sopra para dentro das profundezas da caverna. O que você pretende fazer?");
         room1.DetailedDescription = "Descrição detalhada";
@@ -92,6 +104,12 @@ public class Server : MonoBehaviour
         map.Add(room11);
         map.Add(room12);
 
+        Item maca = new GenericItem("maçã", "teste");
+        room1.Items.Add(maca);
+        Key key = new Key("chave", "uma chave prateada bem simples");
+        room1.Items.Add(key);
+        Door door = new Door("portanorte", "porta de madeira toda mofada toda horrorosa cheia de cupim");
+        room1.Items.Add(door);
     }
 
     public Item Find(Player player, string itemName)
@@ -111,22 +129,18 @@ public class Server : MonoBehaviour
                 return player.Room;
             }
 
-            // Inventory
-            foreach (Item item in player.Items)
+            // Room items
+            Item roomItem = player.Room.Find(itemName);
+            if (roomItem != null)
             {
-                if (item.Name.Equals(itemName))
-                {
-                    return item;
-                }
+                return roomItem;
             }
 
-            // Room items
-            foreach (Item item in player.Room.Items)
+            // Inventory
+            Item playerItem = player.Find(itemName);
+            if (playerItem != null)
             {
-                if (item.Name.Equals(itemName))
-                {
-                    return item;
-                }
+                return playerItem;
             }
         }
 
@@ -146,11 +160,15 @@ public class Server : MonoBehaviour
                 string verb = parsedCommand[0];
                 string target = parsedCommand.ElementAtOrDefault(1) ?? "";
                 Item targetItem = Find(author, target);
-                string[] tail = parsedCommand.Skip(1).ToArray();
+                string[] tail = parsedCommand.Skip(2).ToArray();
 
                 Command cmd = new Command(verb, targetItem, tail);
                 switch (cmd.Verb)
                 {
+                    case "cheat":
+                        Map map = new Map();
+                        map.Describe(author);
+                        break;
                     case "inventário":
                     case "inventario":
                         author.Inventory(author);
@@ -158,8 +176,10 @@ public class Server : MonoBehaviour
                     case "ir":
                         author.Room.Parse(cmd, author);
                         break;
+                    case "pegar":
+                    case "largar":
                     case "examinar":
-                    //case "usar":
+                    case "usar":
                     case "falar":
                         if (targetItem != null)
                         {

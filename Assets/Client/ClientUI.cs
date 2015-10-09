@@ -14,10 +14,10 @@ public class ClientUI : MonoBehaviour {
         {
             name = "RandomName" + Random.Range(1, 1000);
         }
-        
     }
     void OnGUI()
     {
+        GUI.skin.font = (Font)Resources.Load("Consolas");
         if (Network.peerType == NetworkPeerType.Disconnected)
         {
             //We are currently disconnected: Not a client or host
