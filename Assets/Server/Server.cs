@@ -102,21 +102,17 @@ public class Server : MonoBehaviour
         room4.Neighbors.Add("sul", room3);
         room5.Neighbors.Add("leste", room6);
         room5.Neighbors.Add("oeste", room2);
-        //room6.Neighbors.Add("norte",  room9);
-        //room6.Neighbors.Add("sul",    room7);
-        //room6.Neighbors.Add("oeste",  room5);
-        ////corigir os neighbors
-        //room7.Neighbors.Add("leste",  room10);
-        //room7.Neighbors.Add("oeste",  room7);
-
-        //room8.Neighbors.Add("leste",  room10);
-        //room8.Neighbors.Add("oeste",  room7);
-
-        //room9.Neighbors.Add("sul",    room6);
-        //room10.Neighbors.Add("norte", room11);
-        //room10.Neighbors.Add("sul",   room8);
-        //room11.Neighbors.Add("sul",   room10);
-
+        room6.Neighbors.Add("norte",  room10);
+        room6.Neighbors.Add("sul",    room7);
+        room7.Neighbors.Add("norte", room6);
+        room7.Neighbors.Add("leste", room8);
+        room8.Neighbors.Add("oeste", room7);
+        room8.Neighbors.Add("leste", room9);
+        room9.Neighbors.Add("norte", room11);
+        room9.Neighbors.Add("oeste", room8);
+        room10.Neighbors.Add("norte", room12);
+        room10.Neighbors.Add("sul", room9);
+        
         map = new List<Room>();
         map.Add(room1);
         map.Add(room2);
@@ -130,6 +126,7 @@ public class Server : MonoBehaviour
         map.Add(room10);
         map.Add(room11);
         map.Add(room12);
+        map.Add(room13);
 
         Item maca = new GenericItem("maçã", "teste");
         room1.Items.Add(maca);
